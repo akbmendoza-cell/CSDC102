@@ -40,7 +40,7 @@ int login() {
 
 
 //function 3
-void Viewreciept ( vector<int> & ViewReceipt,
+void Viewreciept ( vector<string> & receiptItems,
                    vector<int> &receiptQuantities){
   cout << "Do you want to checkout and pay? (Y/N): ";
 char checkout;
@@ -68,60 +68,72 @@ if(checkout == 'Y' || checkout == 'y') {
 } 
 
 //function 4
+// the user menu was inspired from lab exercise 2
 void userMenu(vector<string>& menuItems,
               vector<double>& menuPrices
               ) {
-    int choice, index,;
+    int choice, index;
         do{
-
+      cout<<"\n";
+      std::cout <<"=============================\n";
+    std::cout <<"          USER  MENU\n";
+    std::cout <<"=============================\n\n";
     cout<< " 1. View Menu\n ";
      cout<< "2. Add Item to Receipt\n ";
      cout<< "3. Remove Item from Receipt\n ";
      cout<< "4. View Receipt\n ";
      cout<< "5. Exit\n ";
      cout<< "Enter choice: ";
-     cin>> choice;
+     std::cin>> choice;
    // view menu
    if(choice == 1){
+      cout<<"\n";
        displayMenu(menuItems, menuPrices);
        cout<<"\n";
        cout << "Press any number to continue: ";
-       cin>>choice;
-      if(choice >= 1 || choice <= 9);
+       std::cin>>choice;
 
-      return 0;
    }
    //add item
    else if(choice == 2){
-       
-       
+       int quantity;
+       bool found = false;
+       cout<<"\n ";
        for(int i = 0; i < menuItems.size(); i++ ){
            cout << i << "-"<< menuItems[i] << "- Php" << menuPrices[i] << endl;
        }
        cout << " Enter item number to add: ";
-       cin>> index;
+       std::cin>> index;
+       for(int i = 0; i < receiptItems.size(); i++) {
+    if(receiptItems[i] == menuItems[index]) {
+        receiptQuantities[i] += quantity; // merge!
+        found = true;
+        break;
+    }
+}
+       if(!found) {
+    receiptItems.push_back(menuItems[index]);
+    receiptPrices.push_back(menuPrices[index]);
+    receiptQuantities.push_back(quantity);
+
+    cout<<"Added " << menuItems[index] << "- php" << menuPrices[index] << " - " <<quantity <<endl; 
        
-       
-       if(index >= 0 && index < menuItems.size()) {
-           receiptItems.push_back(menuItems[index]);
-           receiptPrices.push_back(menuPrices[index]);
-           cout << "Item added successfully. \n";
-           
-       }
+    }
        else{
            cout << "Invalid Input\n";
        }
-       cout << "Press any number to continue";
-       cin>>choice;
-   }
+       cout << "Press a number to continue: ";
+       std::cin>>choice;
+    
    //remove item
-   else if(choice == 3){
+   } else if(choice == 3){
+    cout<<"\n";
        if(receiptItems.empty()){
            cout <<"receipt is empty\n";
        }
        else{
-           for(int i = 0; i < menuItems.size(); i++ ){
-           cout << i << "-"<< menuItems[i] << "- Php" << menuPrices[i] << endl;
+           for(int i = 0; i < receiptItems.size(); i++ ){
+           cout << i << "-"<< receiptItems[i] << "- Php" << receiptPrices[i] << endl;
        }
        cout<< "Enter item number to remove: ";
        cin>>index;
@@ -129,6 +141,7 @@ void userMenu(vector<string>& menuItems,
        if(index >= 0 && index < menuItems.size()){
         receiptItems.erase(receiptItems.begin() + index);
         receiptPrices.erase(receiptPrices.begin() + index);
+        receiptQuantities.erase(receiptQuantities.begin() + index);
         cout<< " Item removed successfully. \n";
        }
        else{
@@ -137,19 +150,20 @@ void userMenu(vector<string>& menuItems,
       }
    }
    // view reciept
-   else if(choice == 4){
+   else if(choice == 4){cout<<"\n";
        if(receiptItems.empty()){
            cout << " No items ordered yet.\n";
        }
-       else
-       {
-           double total = 0;for(int i = 0; i < menuItems.size(); i++ ){
-           cout << i << "-"<< menuItems[i] << "- Php" << menuPrices[i] << endl;
-           
-       }//for close bracket
-   }// else close bracket
-       
-   }//choice 4 close bracket
+       else {
+           double total = 0;
+           for(int i = 0; i < receiptItems.size(); i++) {
+               cout << i << "-"<< receiptItems[i] << "- Php" << receiptPrices[i] << " - " << receiptQuantities[i]<< endl;
+               total += receiptPrices[i] * receiptQuantities[i];
+           }
+           cout << "Total: " << total << endl;
+           Viewreciept(receiptItems, receiptQuantities);
+       }
+   }
    //exit
     } while(choice != 5);
 }
