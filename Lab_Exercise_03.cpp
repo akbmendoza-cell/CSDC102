@@ -7,19 +7,23 @@ vector<double> receiptPrices;
 vector<int> receiptQuantities;
 string ADMIN_PASSCODE = "6767";
 //function 1
-void displayMenu (const vector<string> & menuItems,
-                  const vector<double> & menuPrices ){
-    std::cout <<"=============================\n";
-    std::cout <<"            MENU\n";
-    std::cout <<"=============================\n\n";
-
-    for(int i = 0; i < menuItems.size(); i++){
-      std::cout<< i << " - " << menuItems[i] << " php" << menuPrices[i] <<endl;
+void displayMenu (const vector<string> & menuItems, const vector<double> & menuPrices)
+{
+    cout << "=============================\n";
+    cout << "            MENU\n";
+    cout << "=============================\n\n";
+    for(int i = 0; i < menuItems.size(); i++) {
+        cout << i << " - "
+             << menuItems[i]
+             << " - \u20b1"
+             << menuPrices[i] << endl;
     }
 }
 
+
 //function 2
-int login() {
+int login() 
+{
    int role;
    string passcode;
    
@@ -29,151 +33,181 @@ int login() {
    std::cin >> role;
 
    
-    if(role == 2) {
+    if(role == 2) 
+    {
         std::cout << "Enter Admin Passcode: ";
         std::cin >> passcode;
         if(passcode != ADMIN_PASSCODE) return 0; // invalid
     }
     return role;  // 1, 2, or 3
     
-   }
-
-
-//function 3
-void Viewreciept ( vector<string> & receiptItems,
-                   vector<int> &receiptQuantities){
-  cout << "Do you want to checkout and pay? (Y/N): ";
-char checkout;
-cin >> checkout;
-int total,index;
-if(checkout == 'Y' || checkout == 'y') {
-    double payment;
-    do {
-        cout << "Enter payment amount: ";
-        cin >> payment;
-        if(payment < total)
-            cout << "Insufficient. Please enter at least " << total;
-    } while(payment < total);
-
-    double change = payment - total;
-    cout << "Change: " << change << endl;
-
-    // Clear receipt after successful payment
-    receiptItems.clear();
-    receiptPrices.clear();
-    receiptQuantities.clear();
-    receiptItems.erase(receiptItems.begin() + index);
 }
 
-} 
 
-//function 4
+// function 4
 // the user menu was inspired from lab exercise 2
-void userMenu(vector<string>& menuItems,
-              vector<double>& menuPrices
-              ) {
+void userMenu(vector<string>& menuItems, vector<double>& menuPrices) 
+{
     int choice, index;
-        do{
-      cout<<"\n";
-      std::cout <<"=============================\n";
-    std::cout <<"          USER  MENU\n";
-    std::cout <<"=============================\n\n";
-    cout<< " 1. View Menu\n ";
-     cout<< "2. Add Item to Receipt\n ";
-     cout<< "3. Remove Item from Receipt\n ";
-     cout<< "4. View Receipt\n ";
-     cout<< "5. Exit\n ";
-     cout<< "Enter choice: ";
-     std::cin>> choice;
-   // view menu
-   if(choice == 1){
-      cout<<"\n";
-       displayMenu(menuItems, menuPrices);
-       cout<<"\n";
-       cout << "Press any number to continue: ";
-       std::cin>>choice;
-
-   }
-   //add item
-   else if(choice == 2){
-       int quantity;
-       bool found = false;
-       cout<<"\n ";
-       for(int i = 0; i < menuItems.size(); i++ ){
-           cout << i << "-"<< menuItems[i] << "- Php" << menuPrices[i] << endl;
-       }
-       cout << " Enter item number to add: ";
-       std::cin>> index;
-       for(int i = 0; i < receiptItems.size(); i++) {
-    if(receiptItems[i] == menuItems[index]) {
-        receiptQuantities[i] += quantity; // merge!
-        found = true;
-        break;
-    }
-}
-       if(!found) {
-    receiptItems.push_back(menuItems[index]);
-    receiptPrices.push_back(menuPrices[index]);
-    receiptQuantities.push_back(quantity);
-
-    cout<<"Added " << menuItems[index] << "- php" << menuPrices[index] << " - " <<quantity <<endl; 
-       
-    }
-       else{
-           cout << "Invalid Input\n";
-       }
-       cout << "Press a number to continue: ";
-       std::cin>>choice;
+        
+    do
+    {
+        cout<<"\n";
+        std::cout <<"=============================\n";
+        std::cout <<"          USER  MENU\n";
+        std::cout <<"=============================\n\n";
+        cout<< " 1. View Menu\n ";
+        cout<< "2. Add Item to Receipt\n ";
+        cout<< "3. Remove Item from Receipt\n ";
+        cout<< "4. View Receipt\n ";
+        cout<< "5. Exit\n ";
+        cout<< "Enter choice: ";
+        
+        std::cin>> choice;
+        
     
-   //remove item
-   } else if(choice == 3){
-    cout<<"\n";
-       if(receiptItems.empty()){
-           cout <<"receipt is empty\n";
-       }
-       else{
-           for(int i = 0; i < receiptItems.size(); i++ ){
-           cout << i << "-"<< receiptItems[i] << "- Php" << receiptPrices[i] << endl;
-       }
-       cout<< "Enter item number to remove: ";
-       cin>>index;
-       
-       if(index >= 0 && index < menuItems.size()){
-        receiptItems.erase(receiptItems.begin() + index);
-        receiptPrices.erase(receiptPrices.begin() + index);
-        receiptQuantities.erase(receiptQuantities.begin() + index);
-        cout<< " Item removed successfully. \n";
-       }
-       else{
-           cout<< "Invalid output\n";
-       }
-      }
-   }
-   // view reciept
-   else if(choice == 4){cout<<"\n";
-       if(receiptItems.empty()){
-           cout << " No items ordered yet.\n";
-       }
-       else {
-           double total = 0;
-           for(int i = 0; i < receiptItems.size(); i++) {
-               cout << i << "-"<< receiptItems[i] << "- Php" << receiptPrices[i] << " - " << receiptQuantities[i]<< endl;
-               total += receiptPrices[i] * receiptQuantities[i];
-           }
-           cout << "Total: " << total << endl;
-           Viewreciept(receiptItems, receiptQuantities);
-       }
-   }
-   //exit
+        // view menu
+        if(choice == 1)
+        {
+            cout<<"\n";
+            displayMenu(menuItems, menuPrices);
+            cout<<"\n";
+            cout << "Press any number to continue: ";
+            std::cin>>choice;
+        }
+        //add item
+        else if(choice == 2)
+        {
+            int quantity = 0;
+            bool found = false;
+            cout<<"\n ";
+            
+            displayMenu(menuItems, menuPrices);
+            
+            cout << " Enter item number to add: ";
+            cin >> index;
+            
+            cout << "\n";
+            cout << "How many would you like to order? ";
+            cin >> quantity;
+            
+            cout << "\n";
+            
+            if (index >= 0 && index < menuItems.size())
+            {
+                for(int i = 0; i < receiptItems.size(); i++) 
+                {
+                    if(receiptItems[i] == menuItems[index]) 
+                    {
+                        receiptQuantities[i] += quantity; // merge!
+                        found = true;
+                        break;
+                    }
+                }
+                if(!found) 
+                {
+                    receiptItems.push_back(menuItems[index]);
+                    receiptPrices.push_back(menuPrices[index]);
+                    receiptQuantities.push_back(quantity);
+                }
+                
+                cout << quantity << " X " << menuItems[index] << " added successfully.\n"; 
+            }
+            else
+            {
+               cout << "Invalid Input\n";
+            }
+            cout << "Press a number to continue: ";
+            cin >> choice;
+        }
+        
+        //remove item
+        else if(choice == 3)
+        {
+            int quantity = 0;
+            int index = 0;
+            
+            cout<<"\n";
+            if(receiptItems.empty())
+            {
+               cout <<"receipt is empty\n";
+            }
+            else
+            {
+                double total = 0;
+                for(int i = 0; i < receiptItems.size(); i++ )
+                {
+                    cout << i << "-"<< receiptItems[i] << "- Php" << receiptPrices[i] << endl;
+                    total += receiptPrices[i] * receiptQuantities[i];
+                }
+                cout << "Total: php " << total << endl;
+            }
+            
+            cout<< "Enter item number to remove: ";
+            cin >> index;
+           
+            if(index >= 0 && index < menuItems.size())
+            {
+                receiptItems.erase(receiptItems.begin() + index);
+                receiptPrices.erase(receiptPrices.begin() + index);
+                receiptQuantities.erase(receiptQuantities.begin() + index);
+                cout<< " Item removed successfully. \n";
+            }
+            else
+            {
+               cout<< "Invalid output\n";
+            }
+        }
+        // view reciept
+        else if(choice == 4)
+        {
+            double total = 0;
+            cout<<"\n";
+            if(receiptItems.empty())
+            {
+                cout << " No items ordered yet.\n";
+            }
+            else 
+            {
+               for(int i = 0; i < receiptItems.size(); i++) {
+                   cout << i << "-"<< receiptItems[i] << "- Php" << receiptPrices[i] << " - " << receiptQuantities[i]<< endl;
+                   total += receiptPrices[i] * receiptQuantities[i];
+               }
+               cout << "Total: " << total << endl;
+            }
+            
+            // Inside View Receipt (case 3):
+            cout << "Do you want to checkout and pay? (Y/N): ";
+            char checkout;
+            cin >> checkout;
+            
+            if(checkout == 'Y' || checkout == 'y') {
+                double payment;
+                do {
+                    cout << "Enter payment amount: ";
+                    cin >> payment;
+                    if(payment < total)
+                        cout << "Insufficient. Please enter at least " << total;
+                } while(payment < total);
+            
+                double change = payment - total;
+                cout << "Change: " << change << endl;
+            
+                // Clear receipt after successful payment
+                receiptItems.clear();
+                receiptPrices.clear();
+                receiptQuantities.clear();
+            }
+        }
+    //exit
     } while(choice != 5);
 }
 
               
 
 //function 5
-void adminMenu(vector<string>& menuItems,
-               vector<double>& menuPrices
-               ) {
+void adminMenu(vector<string>& menuItems, vector<double>& menuPrices) 
+{
     int choice;
     
     do {
@@ -213,7 +247,7 @@ void adminMenu(vector<string>& menuItems,
 
 
 int main(){
-   vector<string> menuItems = {"Burger","Fries","Coke","Chicken"};
+    vector<string> menuItems = {"Burger","Fries","Coke","Chicken"};
     vector<double> menuPrices = {99, 49, 39, 129};
     
     while(true) {
