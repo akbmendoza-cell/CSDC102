@@ -114,12 +114,144 @@ class Node
     }
 };
 
-
-
-
-
-
-
+//CSVManager
+class CSVManager
+{
+    public:
+        // Split line into exactly comma-separated total
+        bool parseLine(string line, string fields[], int fieldCount)
+        {
+            int idx = 0;
+            string token = "";
+            for(int i = 0; i <= (int)line.lenght();i++)
+            {
+                if(i==(int)line.lenght() || line[i] == ',')
+                {
+                    if (idx >= fieldCount)
+                    {
+                        return false;
+                    }
+                    fields[idx++] = token;
+                    token = "";
+                }
+                    else 
+                    {
+                        token += line[i];
+                    }
+            }
+            return idx == fieldCount;
+        }  
+        
+        void writeDefaultSongs()
+        {
+            ofstream file(csv_file);
+            if(!file.is_open())
+            {
+                cout << "Error";
+                return;
+            }
+            file << header << "\n";
+            file << "Into it,Chase Atlantic,R&B,2017,3:17\n";
+            file << "Swim,Chase Atlantic,R&B,2017,4:00\n";
+            file << "OHMAMI,Chase Atlantic,R&B,2022,3:47\n";
+            file << "Back to friends,SOMBR,Indie,2025,3:22\n";
+            file << "Prairies,BoyWithUke,Indie,2022,3:17\n";
+            file.close();
+        }
+        
+        void createDefaultCSV()
+        {
+            ifstream checkFile(csv_file);
+            if (checkFile.is_open())
+            {
+                string header;
+                getline(checkFile, header);
+                checkFile.close();
+                if(header == header)
+                    {
+                        return;
+                    }
+                    cout << "[!] Old CSV format detected. Recreating playlist";
+            }
+            writeDefaultSongs();
+            cout << "Default playlist CSV created.";
+        }
+        
+        bool isDuplicate(string title, string artist)
+        {
+            ifstream file(csv_file);
+            if (!file.is_open())
+            {
+                return false;
+            }
+            string line;
+            getline(file, line);
+            
+            while(getline(file, line))
+            {
+                if(line.empty())
+                {
+                    continue;
+                }
+                string fields[5];
+                
+                if(!parseLine(line, fields 5))
+                {
+                    continue
+                }
+                
+                if(toLower(fields[0]) == toLower(title) &&
+                   toLower(fields[1]) == toLower(artist))
+                   {
+                       file.close();
+                       return true;
+                   }
+            }
+            file.close();
+            return false
+        }
+        
+        void saveSong(Song s)
+        {
+            ofstream file(csv_file, ios::app);
+            if(!file.is_open())
+            {
+                cout << "Error\n";
+            }
+            file << s.title << "," << s.artist << "," << s.genre << "," 
+                 << s.year  << "," << s.duration << "\n";
+            file.close();
+        }
+        
+        int loadSongs(Song songs[], int maxSongs)
+        {
+            ifstream file(csv_file);
+            if (!file.is_open())
+            {
+                cout << "Error\n";
+            }
+            string line;
+            getline(file, line);
+            int count = 0;
+            
+            while(getline(file, line) && cout < maxSongs)
+            {
+                if(line.empty())
+                {
+                    continue
+                }
+                string fields[5];
+                if(!parseLine(line, fields, 5))
+                {
+                    continue;
+                }
+                songs[count++] = Song(fields[0], fields[1],
+                                      fields[2], stoi(fields[3], fields[4]));
+            }
+        }
+        file.close();
+        return false;
+};
 
 
 
